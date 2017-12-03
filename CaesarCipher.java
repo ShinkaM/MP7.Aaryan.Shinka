@@ -11,21 +11,25 @@ import java.util.Scanner;
  */
 public class CaesarCipher {
 
-    /** Minimum shift that encrypt and decrypt need to handle. 1024*/
+    /** Minimum shift that encrypt and decrypt need to handle. */
     public static final int MIN_SHIFT = -1024;
 
-    /** Maximum shift that encrypt and decrypt need to handle. -1024*/
+    /** Maximum shift that encrypt and decrypt need to handle. */
     public static final int MAX_SHIFT = 1024;
-    /** the range of eligible characters. */
-    public static final int NINETY_FIVE = 95;
-    /** add this if the encrypted is out of range. */
-    public static final int THIRTY_TWO = 32;
+
+    /** Maximum ASCII value. */
+    public static final int MAX = 126;
+
+    /** Minimum ASCII value. */
+    public static final int MIN = 32;
+
+    /**Difference to be added to keep the ASCII value within limits. */
+    public static final int DIF = 95;
 
     /**
      * Encrypt a single line of text using a rotate-N transformation.
      * <p>
-     * The printable range o
-     * f ASCII characters starts at decimal value 32 (' ') and ends at 126
+     * The printable range of ASCII characters starts at decimal value 32 (' ') and ends at 126
      * ('~'). You should shift characters within this range by the shift value provided. For
      * example, ' ' (32) shift 1 becomes '!' (33), while '~' (126) shift 1 wraps around and becomes
      * ' ' (32). You may want to explore modular arithmetic to simplify the transformation.
@@ -39,102 +43,63 @@ public class CaesarCipher {
      * <strong>Your solution must match the expected output exactly, otherwise you will not receive
      * credit.</strong>
      * <p>
-     * Complete the Javadoc comment for this function and write it.
-     *
+     * @param line stores a character array inputted by the user
+     * @param shift stores an integer by which each character is shifted by
+     * @return a new character array which is encrypted
      * @see <a href="http://www.asciitable.com/">ASCII Character Table</a>
-     * @return an encrypted, original, and decrypted input
-     * @param line = input char array
-     * @param shift the number of digits to shift the line
-     *
      */
-
     public static char[] encrypt(final char[] line, final int shift) {
-        /*
-         * this code encrypts and decrypts an array of characters.
-         */
-        int i = 0;
-        char[] copyLine = new char[line.length];
-
-
-        for (i = 0; i < line.length; i++) {
-            copyLine[i] = line[i];
-            if (line[i] < ' ' || line[i] > '~') {
-                return null;
+        int length = line.length;
+        char[] newLine = new char[length];
+        int a = 0;
+        for (int i = 0; i < length; i++) {
+            a = ((int) line[i] + shift);
+            while (a > MAX) {
+                a = a - DIF;
             }
+            while (a < MIN) {
+                a = a + DIF;
+            }
+            newLine[i] = (char) a;
         }
-        if (shift > MAX_SHIFT || shift < MIN_SHIFT || line.length == 0) {
-            return null;
-        } else {
-            if (shift <= MAX_SHIFT && shift >= MIN_SHIFT && line.length != 0) {
-                for (int j = 0; j < line.length; j++) {
-                    if (copyLine[j] >= ' ' || copyLine[j] <= '~') {
-                        int letter = copyLine[j] + shift;
-                        int encrypted = (letter) % NINETY_FIVE;
-                        if ((encrypted < THIRTY_TWO && encrypted >= 0)
-                                || (encrypted > -THIRTY_TWO * 2 && encrypted < 0)) {
-                            encrypted += NINETY_FIVE;
-                        } else {
-                            if (encrypted <= -THIRTY_TWO * 2) {
-                                encrypted += NINETY_FIVE * 2;
-                            }
-                        }
-                        copyLine[j] = (char) (0 + encrypted);
-                    }
-                }
+        if (shift > MAX_SHIFT || shift < MIN_SHIFT) {
+            newLine = null;
         }
-            return copyLine;
-    }
+        return newLine;
     }
 
-/*
-     * Undoes the transformation performed by encrypt above. Add a Javadoc comment for this function
-     * and complete it. It should also return a new character array, not modify the one passed in.
-     */
     /**
-     *
-     * @param line this is the input char array
-     * @param shift this is the nuber of indexes to thift
-     * @return the modified line
+     * Decrypt a single line of text using a rotate-N transformation.
+     * * @param line stores a character array inputted by the user
+     * @param shift stores an integer by which each character is shifted by
+     * @return a new character array which is encrypted
+     * @see <a href="http://www.asciitable.com/">ASCII Character Table</a>
      */
-
     public static char[] decrypt(final char[] line, final int shift) {
-
-        int i = 0;
-
-        if (shift > MAX_SHIFT || shift < MIN_SHIFT || line.length == 0) {
-            return null;
-        } else {
-            char[] newLine = new char[line.length];
-
-            for (i = 0; i < line.length; i++) {
-                newLine[i] = line[i];
-                if (line[i] < ' ' || line[i] > '~') {
-                    return null;
-                }
+        int length = line.length;
+        char[] newLine = new char[length];
+        int a = 0;
+        for (int i = 0; i < length; i++) {
+            a = ((int) line[i] - shift);
+            while (a < MIN) {
+                a = a + DIF;
             }
-                for (int j = 0; j < newLine.length; j++) {
-                    if (newLine[j] >= ' ' || newLine[j] <= '~') {
-                        int letter = newLine[j] - shift;
-                        int encrypted = (letter) % NINETY_FIVE;
-                        if ((encrypted < THIRTY_TWO && encrypted >= 0)
-                                || (encrypted > -THIRTY_TWO * 2 && encrypted <= 0)) {
-                            encrypted += NINETY_FIVE;
-                        } else {
-                            if (encrypted <= -THIRTY_TWO * 2) {
-                                encrypted += NINETY_FIVE * 2;
-                            }
-                        }
-                        newLine[j] = (char) (0 + encrypted);
-                    }
-                }
-                return newLine;
+            while (a > MAX) {
+                a = a - DIF;
+            }
+            newLine[i] = (char) a;
         }
+        if (shift > MAX_SHIFT || shift < MIN_SHIFT) {
+            newLine = null;
+        }
+        return newLine;
     }
+
     /**********************************************************************************************
      * You do not need to modify code below this comment.
      **********************************************************************************************/
 
-    /**hiohi
+    /**
      * Solicits a single line of text from the user, encrypts it using a random shift, and then
      * decrypts it.
      * <p>
