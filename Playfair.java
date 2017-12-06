@@ -1,23 +1,23 @@
-
+import java.util.Scanner;
 public class Playfair {
 	/**
 	 * Used to contain the key.
 	 */
-	private char[][] arr = new char[5][5];
+	static char[][] arr = new char[5][5];
 	/**
 	 * contains the message to be encoded, later made into an array in encode.
 	 */
-	private String code = "";
+	static String code = "";
 	
 	/**
 	 * contains the message to be encoded in AB CD EF . . .  format
 	 */
-	private String[] encode = null;
+	static String[] encode = null;
 	
 	/**
 	 * this is the key used, has all letters of alphabet except Q
 	 */
-	private String key = "THEUICKBROWNFXJMPSVRLAZYD";
+	static String key = "THEUICKBROWNFXJMPSVRLAZYD";
 
 
 	/**
@@ -25,27 +25,23 @@ public class Playfair {
 	 * Assumes that the key is 25 letters long, with no punctuations.
 	 * @return
 	 */
-	public boolean setKey(String x){
-		x = key;
+	public static char[][] setKey(String x){
+	    x = key;
 		int k = 0;
 		while(k < 25) {
 			for(int i = 0; i < arr.length; i++) {
 				for(int j = 0; j < i; j++) {
 						if(x.toUpperCase().charAt(k) >= 'A' 
 								&& x.toUpperCase().charAt(k) <= 'Z') { // makes sure that the key is between A-Z								
-							this.arr[i][j] = x.toUpperCase().charAt(k);
+							arr[i][j] = x.toUpperCase().charAt(k);
 							k++;
 						} else {
-							return false; // reject any character not in the alphabet
+							return null; // reject any character not in the alphabet
 						}
 				}
 			}
 		}
-		return true;
-	}
-	
-	public char[][] getKey(){
-		return this.arr;
+		return arr;
 	}
 	
 	/**
@@ -55,21 +51,20 @@ public class Playfair {
 	 * @param x
 	 * @return
 	 */
-	public String makeCode(String x) {
-		x = "Helloworld";
-		
+	public static String makeCode(String x) {
+	
 		if (x.length() != 0) { // string is not null
 			for (int i = 0; i < x.length() - 2; i+= 2) {
 				if (x.charAt(i) != x.charAt(i + 1)) { // checks for duplicated letter pairs, like EE
-					this.code += x.toUpperCase().charAt(i) + x.toUpperCase().charAt(i + 1);
+					code += x.toUpperCase().charAt(i) + x.toUpperCase().charAt(i + 1);
 				} else {
-					this.code += x.toUpperCase().charAt(i) + "X" + x.toUpperCase().charAt(i + 1); // adds filler character if there is a duplicate
+					code += x.toUpperCase().charAt(i) + "X" + x.toUpperCase().charAt(i + 1); // adds filler character if there is a duplicate
 				}
 			}
-			if (this.code.length() %2 != 0) {
-				this.code += "Z"; // adds a filler character if length is odd
+			if (code.length() %2 != 0) {
+				code += "Z"; // adds a filler character if length is odd
 			} 
-			return this.code;
+			return code;
 		} else {
 			return null;
 		}
@@ -79,53 +74,29 @@ public class Playfair {
 	 * @param x
 	 * @return
 	 */
-	public boolean setCode(String x) {
+	public static String[] setCode(String x) {
 		if(x != null) {
 			String y = makeCode(x);
-			this.encode = new String[y.length() / 2];
-			for(int i = 0; i < encode.length -1; i++) {
-				this.encode[i] = x.substring(i, i+1);
+			encode = new String[y.length() / 2];
+			for(int i = 0; i < encode.length - 1; i+=2) {
+				encode[i] = x.substring(i, i+1);
 			}
-			return true;
+			return encode;
 		} else {
-			return false;
-		}
-	}
-	
-	public String[] getCode() {
-		return this.encode;
-	}
-
-	/***
-	 * A constructor
-	 * a = key.
-	 * b = code.
-	 * @param x
-	 * @param y
-	 */
-	public Playfair(String a, String b) {
-		if(a.length() > 25) {
-			a = null;
-		} else {
-			this.setKey(a);
-		}
-		if(b.length() == 0) {
-			b = null;
-		} else {
-			this.setCode(b);
+			return null;
 		}
 	}
 
-	public String[] encode(String[] text) { // the input is AB CD EF . . . 
+	public static String[] encode(String[] text) { // the input is AB CD EF . . . made from setCode
 		int x = 0;
 		int y = 0;
-		String[] code = new String[this.encode.length];
+		String[] code = new String[encode.length];
 		
-		//find the i and j for the first letter of each pair
+		//find the i and j for the first letter of each pair (so H if HI is the pair)
 		for(int k = 0; k < text.length; k++) {
-			for(int i = 0; i < this.arr.length; i++) {
+			for(int i = 0; i < arr.length; i++) {
 				for(int j = 0; j < i; j++) {
-					if(this.arr[i][j] == text[k].charAt(0)) {
+					if(arr[i][j] == text[k].charAt(0)) {
 						x = i; // the row
 						y = j; // the column
 					}
@@ -134,19 +105,19 @@ public class Playfair {
 			}
 			// for the case where the second pair is in the same row
 			
-			if(text[k].charAt(1) == this.arr[x][y + 1]) {
-				code[k] += this.arr[x][(y + 1) % 5] + this.arr[x][(y + 2) % 5]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
+			if(text[k].charAt(1) == arr[x][y + 1]) {
+				code[k] += arr[x][(y + 1) % 5] + arr[x][(y + 2) % 5]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
 			}
 			
 			// for the case where the second pair is in the same column
-			if(text[k].charAt(1) == this.arr[x + 1][y]) {
-				code[k] += this.arr[(x + 1) % 5][y] + this.arr[(x + 2) % 5][y];
+			if(text[k].charAt(1) == arr[x + 1][y]) {
+				code[k] += arr[(x + 1) % 5][y] + arr[(x + 2) % 5][y];
 			}
 			
 			// for the rectangular case
 			//checks row
 			for(int a = 0; a < arr.length; a++) {
-				if(text[k].charAt(1) == this.arr[x][a]) {
+				if(text[k].charAt(1) == arr[x][a]) {
 					// adds the letters in the opposite corners of the key
 					//
 					// A B C D
@@ -156,13 +127,42 @@ public class Playfair {
 					//
 					//if input is EL, output is HI
 					//
-					code[k] += this.arr[a][y] + this.arr[x][a];
+					code[k] += arr[a][y] + arr[x][a];
 				}
 			}
 		}
 		return code;
 	}
+	   @SuppressWarnings("resource")
+	    public static void main(final String[] unused) {
+
+	        String linePrompt = String.format("Enter a line of text with no punctuations, or a blank line to exit:");
+
+	        /*
+	         * Two steps here: first get a line, then a shift integer.
+	         */
+	        Scanner lineScanner = new Scanner(System.in);
+	        repeat: while (true) {
+	            String line = null;
+
+	            System.out.println(linePrompt);
+	            while (lineScanner.hasNextLine()) {
+	                line = lineScanner.nextLine();
+	                if (line.length() <= 0 || line.split("[ ,.;?!()-]").length != line.length()) { // checks if there are punctuations
+	                    break repeat;
+	                } else {	                
+	                    break;
+	                }
+	            }
+	            String[] original = setCode(line);
+	            System.out.println("Encrypted line with the key: " + key);
+	            System.out.println(encode(original));
+	        }
+	        lineScanner.close();
+	   }
+	            
 }
+
 	
 	
 	
