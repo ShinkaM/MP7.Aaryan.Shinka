@@ -1,5 +1,8 @@
 
 public class Playfair {
+	/**
+	 * Used to contain the key.
+	 */
 	private char[][] arr = new char[5][5];
 	/**
 	 * contains the message to be encoded, later made into an array in encode.
@@ -10,10 +13,12 @@ public class Playfair {
 	 * contains the message to be encoded in AB CD EF . . .  format
 	 */
 	private String[] encode = null;
-	private String key = "THEUICKBROWNFXJMPSVRLAZYD";// missing Q
-	public char[] cAlphabet = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-	public String k1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	
+	/**
+	 * this is the key used, has all letters of alphabet except Q
+	 */
+	private String key = "THEUICKBROWNFXJMPSVRLAZYD";
+
 
 	/**
 	 * This makes the key for the cipher.  
@@ -45,19 +50,20 @@ public class Playfair {
 	
 	/**
 	 * A helper function
-	 * Takes the string to be encoded and formats it so that its length is even.
+	 * Takes the string to be encoded and formats it so that its length is even and in all caps.
 	 * Replaces duplicated characters with an X, so TREE = TR EX ES
 	 * @param x
 	 * @return
 	 */
 	public String makeCode(String x) {
 		x = "Helloworld";
-		if (x.length() != 0) {
-			for (int i = 0; i < x.length() -1; i++) {
-				if (x.charAt(i) != x.charAt(i + 1)) { // checks for duplicated letters
-					this.code += x.toUpperCase().charAt(i);
+		
+		if (x.length() != 0) { // string is not null
+			for (int i = 0; i < x.length() - 2; i+= 2) {
+				if (x.charAt(i) != x.charAt(i + 1)) { // checks for duplicated letter pairs, like EE
+					this.code += x.toUpperCase().charAt(i) + x.toUpperCase().charAt(i + 1);
 				} else {
-					this.code += "X"; // adds filler character if there is a duplicste
+					this.code += x.toUpperCase().charAt(i) + "X" + x.toUpperCase().charAt(i + 1); // adds filler character if there is a duplicate
 				}
 			}
 			if (this.code.length() %2 != 0) {
