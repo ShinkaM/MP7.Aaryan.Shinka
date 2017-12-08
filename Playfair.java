@@ -52,41 +52,46 @@ public class Playfair {
 	 * @return
 	 */
 	public static String makeCode(String x) {
-	
+		String str1 = "";
 		if (x.length() != 0) { // string is not null
-			for (int i = 0; i < x.length() - 2; i += 2) {
-				if(x.toUpperCase().charAt(i) >= 'A' && x.toUpperCase().charAt(i +1) <= 'Z') {
+			for (int i = 0; i < x.length() - 1; i += 1) {
+				if(x.toUpperCase().charAt(i) >= 'A' && x.toUpperCase().charAt(i) <= 'Z'
+						&& x.toUpperCase().charAt(i + 1) >= 'A' && x.toUpperCase().charAt(i + 1) <= 'Z') {
 					if (x.charAt(i) != x.charAt(i + 1)) { // checks for duplicated letter pairs, like EE
-						code += x.charAt(i) + x.charAt(i + 1);
+						str1 += x.toUpperCase().charAt(i) + "" ;
 					} else {
-						code += x.charAt(i) + "X" + x.charAt(i + 1); // adds filler character if there is a duplicate
+						str1 += x.toUpperCase().charAt(i) + "X"; // adds filler character if there is a duplicate
 					}
-					System.out.println(code + "CC");
+					//System.out.println(code + "CC");
 				} else {
 					return null;
 				}
 			}
-			if (code.length() %2 != 0) {
-				code += "Z"; // adds a filler character if length is odd
+			str1 += x.toUpperCase().charAt(x.length()-1);
+			if (str1.length() % 2 != 0) {
+				str1 += "Z"; // adds a filler character if length is odd
 			} 
-			
-			return code;
+			//System.out.println(str1 + "&&");
+			return str1;
 		} else {
 			return null;
 		}
+		
 	}
 	/**
 	 * Formats the code so that it is in the AB CD EF ... form
 	 * @param x
 	 * @return
 	 */
-	public String[] setCode() {
-		if(code != null) {
-			encode = new String[code.length() / 2];
+	public String[] setCode(String x) {
+		String str2 = makeCode(x);
+		if(str2 != null) {
+			encode = new String[str2.length() / 2];
 			for(int i = 0, j = 0; i < encode.length; i++, j+=2 ) {
-				encode[i] = code.substring(j, j + 2);
+				encode[i] = "" + str2.substring(j, j + 2);
+				//System.out.println(encode[i]);
 			}
-	//		System.out.println("*" + String.valueOf(encode[0]));
+			
 			return encode;
 		} else {
 			return null;
@@ -111,13 +116,13 @@ public class Playfair {
 			// for the case where the second pair is in the same row
 			for(int i = y + 1; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[x][i]) {
-					output[k] += arr[x][(y + 1) % arr.length] + arr[x][(i + 1) % arr.length]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
+					output[k] = arr[x][(y + 1) % arr.length] + "" + arr[x][(i + 1) % arr.length]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
 				}
 			}
 			// for the case where the second pair is in the same column
 			for(int i = x + 1; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[i][y]) {
-					output[k] += arr[(x + 1) % arr.length][y] + arr[(i + 1) % arr.length][y];
+					output[k] = arr[(x + 1) % arr.length][y] + "" + arr[(i + 1) % arr.length][y];
 				}
 			}
 			
@@ -135,66 +140,55 @@ public class Playfair {
 					//
 					//if input is EL, output is HI
 					//
-					output[k] += arr[x][b] + arr[a][y];
+					output[k] = arr[x][b] + "" + arr[a][y];
 				}
 			}
 		}
 		
 	}
+		 /*for(int i = 0; i < output.length; i++) {
+         	System.out.print(output[i] + " " + "@@");
+         }*/
 		return output;
-}
+	}
 	   @SuppressWarnings("resource")
 	    public static void main(final String[] unused) {
 
 
-	        String linePrompt = String.format("Enter a line of text, or a blank line to exit:");
+	        String linePrompt = String.format("Enter a line of text, no punctuations, or a blank line to exit:");
 	     
 
 	        /*
 	         * Two steps here: first get a line, then a shift integer.
 	         */
 	        Scanner lineScanner = new Scanner(System.in);
-	         while (true) {
+	         repeat: while (true) {
 	            String line = null;
-	            
-
 	            System.out.println(linePrompt);
 	            while (lineScanner.hasNextLine()) {
-	                Scanner textScanner = new Scanner(lineScanner.nextLine());
-	                if (textScanner.hasNextLine()) {
-	                    line = textScanner.nextLine();
-	                    if (textScanner.hasNext() || makeCode(line) == null) {
-	                        line = null;
+	                line = lineScanner.nextLine();
+	                    if (lineScanner.equals("") || makeCode(line) == null) {
 	                        System.out.println("Invalid input: no punctuations");
+	                        break repeat;
+	                        
+	                    } else {
+	                    	break;
 	                    }
-	                } else {
-	                    System.out.println("Invalid input: please enter a text.");
-	                }
-	                textScanner.close();
-	                if (line != null) {
-	                    break;
-	                }
 	            }
+	         
 
-	            if (line == null || line.equals("")) {
-	                throw new RuntimeException("Should have a line at this point");
-	            }
 	            Playfair obj = new Playfair();
 	            obj.setKey();
 	            Playfair.makeCode(line);
-	            obj.setCode();
+	            obj.setCode(line);
 	            String[] result = obj.encode();
 	            for(int i = 0; i < result.length; i++) {
 	            	System.out.print(result[i] + " ");
 	            }
+	            System.out.println("");
 	        }
-	         
+	           lineScanner.close();
 
-   }
+  }
+	 
 }
-
-	
-	
-	
-
-
