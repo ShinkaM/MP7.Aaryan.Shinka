@@ -15,9 +15,9 @@ public class Playfair {
 	static String[] encode = null;
 	
 	/**
-	 * this is the key used, has all letters of alphabet except Q
+	 * this is the key used, has all letters of alphabet except Q and G
 	 */
-	static String key = "THEUICKBROWNFXJMPSVRLAZYD";
+	static String key = "THEUICKBROWNFXJMPSVLAZYDG";
 
 
 	/**
@@ -62,6 +62,7 @@ public class Playfair {
 					} else {
 						str1 += x.toUpperCase().charAt(i) + "X"; // adds filler character if there is a duplicate
 					}
+					
 					//System.out.println(code + "CC");
 				} else {
 					return null;
@@ -101,6 +102,7 @@ public class Playfair {
 	public String[] encode() { // the input is AB CD EF . . . made from setCode
 		int x = 0;
 		int y = 0;
+		boolean square = true;
 		String[] output = new String[encode.length];
 		//find the i and j for the first letter of each pair (so H if HI is the pair)
 		for(int k = 0; k < encode.length; k++) {
@@ -114,36 +116,41 @@ public class Playfair {
 				}
 			}
 			// for the case where the second pair is in the same row
+			
 			for(int i = y + 1; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[x][i]) {
+					square = false;
 					output[k] = arr[x][(y + 1) % arr.length] + "" + arr[x][(i + 1) % arr.length]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
 				}
 			}
 			// for the case where the second pair is in the same column
 			for(int i = x + 1; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[i][y]) {
+					square = false;
 					output[k] = arr[(x + 1) % arr.length][y] + "" + arr[(i + 1) % arr.length][y];
 				}
 			}
 			
 			// for the rectangular case
 			//checks row
-			for(int a = 0; a < arr.length; a++) {
-				for(int b = 0; b < arr.length; b++) {
-				if(encode[k].charAt(1) == arr[b][a]) {
-					// adds the letters in the opposite corners of the key
-					//
-					// A B C D
-					// E F G H
-					// I J K L
-					// L M N O
-					//
-					//if input is EL, output is HI
-					//
-					output[k] = arr[x][b] + "" + arr[a][y];
+			if(square) {
+					for(int a = 0; a < arr.length; a++) {
+						for(int b = 0; b < arr.length; b++) {
+						if(encode[k].charAt(1) == arr[b][a]) {
+							// adds the letters in the opposite corners of the key
+							//
+							// A B C D
+							// E F G H
+							// I J K L
+							// L M N O
+							//
+							//if input is EL, output is HI
+							//
+							output[k] = arr[x][b] + "" + arr[a][y];
+						}
+					}
 				}
 			}
-		}
 		
 	}
 		 /*for(int i = 0; i < output.length; i++) {
@@ -155,7 +162,7 @@ public class Playfair {
 	    public static void main(final String[] unused) {
 
 
-	        String linePrompt = String.format("Enter a line of text, no punctuations, or a blank line to exit:");
+	        String linePrompt = String.format("Enter a line of text, with no space or punctuations, or a blank line to exit:");
 	     
 
 	        /*
