@@ -3,13 +3,36 @@ BROWN
 	RO CJ PH
 	RO null PH
 
+____________________
+* the failing paors work when they are inputted by itself
+OW
+	OW
+	CJ
+
+____________________
+
 BETTER
 	BE TX TE RZ
+	BE UW HU KD
 	BE UW HU null
+____________________
+RZ
+	RZ
+	KD
+	
+____________________
 
 FXJMPZ
 	FX JM PZ
+	XJ WL ZH
 	XJ null ZH
+
+____________________
+
+JM
+	JM
+	WL
+____________________
 
 HELLO
 	HE LX LO
