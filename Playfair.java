@@ -34,11 +34,13 @@ public class Playfair {
 						if(x.toUpperCase().charAt(k) >= 'A' 
 								&& x.toUpperCase().charAt(k) <= 'Z') { // makes sure that the key is between A-Z								
 							arr[i][j] = x.toUpperCase().charAt(k);
+							//System.out.print(arr[i][j] + " ");
 							k++;
 						} else {
 							return null; // reject any character not in the alphabet
 						}
 				}
+				//System.out.println();
 			}
 		}
 		return arr;
@@ -90,8 +92,9 @@ public class Playfair {
 			encode = new String[str2.length() / 2];
 			for(int i = 0, j = 0; i < encode.length; i++, j+=2 ) {
 				encode[i] = "" + str2.substring(j, j + 2);
-				//System.out.println(encode[i]);
+				System.out.print(encode[i]+ " ");
 			}
+			System.out.println();
 			
 			return encode;
 		} else {
@@ -106,11 +109,12 @@ public class Playfair {
 		String[] output = new String[encode.length];
 		//find the i and j for the first letter of each pair (so H if HI is the pair)
 		for(int k = 0; k < encode.length; k++) {
-			for(int i = 0; i < arr.length; i++) {
-				for(int j = 0; j < i; j++) {
+	  outer:for(int i = 0; i < arr.length; i++) {
+				for(int j = 0; j < arr[0].length; j++) {
 					if(arr[i][j] == encode[k].charAt(0)) {
-						x = i; // the row
-						y = j; // the column
+						x = i; // the column
+						y = j; // the row
+						break outer;
 					}
 					
 				}
@@ -135,8 +139,8 @@ public class Playfair {
 			//checks row
 			if(square) {
 					for(int a = 0; a < arr.length; a++) {
-						for(int b = 0; b < arr.length; b++) {
-						if(encode[k].charAt(1) == arr[b][a]) {
+						for(int b = 0; b < arr[0].length; b++) {
+						if(encode[k].charAt(1) == arr[a][b]) {
 							// adds the letters in the opposite corners of the key
 							//
 							// A B C D
@@ -186,7 +190,6 @@ public class Playfair {
 
 	            Playfair obj = new Playfair();
 	            obj.setKey();
-	            Playfair.makeCode(line);
 	            obj.setCode(line);
 	            String[] result = obj.encode();
 	            for(int i = 0; i < result.length; i++) {
