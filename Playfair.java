@@ -59,8 +59,13 @@ public class Playfair {
 			for (int i = 0; i < x.length() - 1; i += 1) {
 				if(x.toUpperCase().charAt(i) >= 'A' && x.toUpperCase().charAt(i) <= 'Z'
 						&& x.toUpperCase().charAt(i + 1) >= 'A' && x.toUpperCase().charAt(i + 1) <= 'Z') {
-					if (x.charAt(i) != x.charAt(i + 1)) { // checks for duplicated letter pairs, like EE
-						str1 += x.toUpperCase().charAt(i) + "" ;
+					
+				    if (x.charAt(i) != x.charAt(i + 1)) { // checks for duplicated letter pairs, like EE
+				    	if(x.toUpperCase().charAt(i) == 'Q') {
+							str1 += "U";
+						} else {
+						    str1 += x.toUpperCase().charAt(i) + "" ;
+						}
 					} else {
 						str1 += x.toUpperCase().charAt(i) + "X"; // adds filler character if there is a duplicate
 					}
