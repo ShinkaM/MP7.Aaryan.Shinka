@@ -91,15 +91,20 @@ public class Playfair {
 	 * @param x
 	 * @return
 	 */
-	public String[] setCode(String x) {
-		String str2 = makeCode(x);
+	public static String[] setCode(String x, int a) {
+		String str2 = "";
+		if(a == 1) {
+		    str2 = makeCode(x);
+		} else {
+			str2 = x.toUpperCase();
+		}
 		if(str2 != null) {
 			encode = new String[str2.length() / 2];
 			for(int i = 0, j = 0; i < encode.length; i++, j+=2 ) {
 				encode[i] = "" + str2.substring(j, j + 2);
-				System.out.print(encode[i]+ " ");
+				//System.out.print(encode[i]+ " ");
 			}
-			System.out.println();
+			//System.out.println();
 			
 			return encode;
 		} else {
@@ -167,23 +172,50 @@ public class Playfair {
          }*/
 		return output;
 	}
-	   @SuppressWarnings("resource")
-	    public static void main(final String[] unused) {
+	public String decode() {
+		Playfair ob = new Playfair();
+		String[] result = ob.encode();
+		String output = "";
+		for(int i = 0; i < result.length; i++) {
+       	 output += result[i];
+          }
+		String str=output.substring(0,1);
+		for(int i = 1; i < output.length() - 1; i++) {
+	       	if(output.charAt(i) == 'X') {
+	       		if(output.charAt(i-1) == output.charAt(i+1)) {
+	       			continue;
+	       		} else {
+	       			str += output.charAt(i);
+	       		}
+	       	} else {
+	       		str += output.charAt(i);
+	       	}
+	      }
+		if(output.charAt(output.length()-1) != 'Z') {
+			str += output.charAt(output.length() - 1);
+		}
+		return str;
+	}
+	@SuppressWarnings("resource")
+	public static void main(final String[] unused) {
 
-
-	        String linePrompt = String.format("Enter a line of text, with no space or punctuations, or a blank line to exit:");
+	        Scanner lineScanner = new Scanner(System.in);
+	        String linePrompt1 = String.format("Input 1 to encrypt or 2 to decrypt");
+	        
+	        String linePrompt2 = String.format("Enter a line of text or code, with no space or punctuations, or a blank line to exit:");
 	     
 
 	        /*
 	         * Two steps here: first get a line, then a shift integer.
 	         */
-	        Scanner lineScanner = new Scanner(System.in);
 	         repeat: while (true) {
-	            String line = null;
-	            System.out.println(linePrompt);
+	        	String line = null;
+	        	System.out.println(linePrompt2);
+		        line = lineScanner.nextLine();
+	        	System.out.println(linePrompt1);
+	        	int a = lineScanner.nextInt();
 	            while (lineScanner.hasNextLine()) {
-	                line = lineScanner.nextLine();
-	                    if (lineScanner.equals("") || makeCode(line) == null) {
+	                    if (line.equals("") || setCode(line,a) == null) {
 	                        System.out.println("Invalid input: no punctuations");
 	                        break repeat;
 	                        
@@ -191,16 +223,21 @@ public class Playfair {
 	                    	break;
 	                    }
 	            }
-	         
-
 	            Playfair obj = new Playfair();
-	            obj.setKey();
-	            obj.setCode(line);
-	            String[] result = obj.encode();
-	            for(int i = 0; i < result.length; i++) {
-	            	System.out.print(result[i] + " ");
-	            }
-	            System.out.println("");
+                if(a == 1) {
+	               obj.setKey();
+	               Playfair.setCode(line,a);
+	               String[] result = obj.encode();
+	               for(int i = 0; i < result.length; i++) {
+	            	 System.out.print(result[i] + " ");
+	               }
+	               System.out.println("");
+                } else if(a == 2) {
+                   obj.setKey();
+                   Playfair.setCode(line,a);
+                   String result = obj.decode();
+                   System.out.println(result);
+                }
 	        }
 	           lineScanner.close();
 
