@@ -115,15 +115,16 @@ public class Playfair {
 	public String[] encode() { // the input is AB CD EF . . . made from setCode
 		int x = 0;
 		int y = 0;
-		boolean square = true;
 		String[] output = new String[encode.length];
 		//find the i and j for the first letter of each pair (so H if HI is the pair)
 		for(int k = 0; k < encode.length; k++) {
+			boolean square = true;
 	  outer:for(int i = 0; i < arr.length; i++) {
 				for(int j = 0; j < arr[0].length; j++) {
 					if(arr[i][j] == encode[k].charAt(0)) {
 						x = i; // the column
 						y = j; // the row
+						//System.out.println(x+""+y);
 						break outer;
 					}
 					
@@ -131,14 +132,14 @@ public class Playfair {
 			}
 			// for the case where the second pair is in the same row
 			
-			for(int i = y + 1; i < arr.length; i++) {
+			for(int i = 0; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[x][i]) {
 					square = false;
 					output[k] = arr[x][(y + 1) % arr.length] + "" + arr[x][(i + 1) % arr.length]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
 				}
 			}
 			// for the case where the second pair is in the same column
-			for(int i = x + 1; i < arr.length; i++) {
+			for(int i = 0; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[i][y]) {
 					square = false;
 					output[k] = arr[(x + 1) % arr.length][y] + "" + arr[(i + 1) % arr.length][y];
@@ -147,6 +148,7 @@ public class Playfair {
 			
 			// for the rectangular case
 			//checks row
+			//System.out.println("working");
 			if(square) {
 					for(int a = 0; a < arr.length; a++) {
 						for(int b = 0; b < arr[0].length; b++) {
@@ -160,6 +162,7 @@ public class Playfair {
 							//
 							//if input is EL, output is HI
 							//
+							//System.out.println(a + " "+ b);
 							output[k] = arr[x][b] + "" + arr[a][y];
 						}
 					}
@@ -238,6 +241,9 @@ public class Playfair {
                    String result = obj.decode();
                    System.out.println(result);
                 }
+                code = "";
+                encode = null;
+                arr = null;
 	        }
 	           lineScanner.close();
 
