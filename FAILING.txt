@@ -1,0 +1,31 @@
+BROWN
+	BR OW NZ
+	RO CJ PH
+	RO null PH
+
+BETTER
+	BE TX TE RZ
+	BE UW HU null
+
+FXJMPZ
+	FX JM PZ
+	XJ null ZH
+
+HELLO
+	HE LX LO
+	EU VJ GJ
+	EU null null
+
+MORROWS
+	MO RX RO WZ
+	LX XU OC NA
+	LX XU OC null
+
+BONE
+	BO NE
+	BO FH
+	RC null
+
+OWNERS
+	OW NE RZ
+	CJ FH KD
