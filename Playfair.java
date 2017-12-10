@@ -216,25 +216,17 @@ public class Playfair {
 	}
 	@SuppressWarnings("resource")
 	public static void main(final String[] unused) {
-
-	        Scanner lineScanner = new Scanner(System.in);
-	        //String linePrompt1 = String.format("Input 1 to encrypt or 2 to decrypt");
-	        
-	       // String linePrompt2 = String.format("Enter a line of text or code, with no space or punctuations, or a blank line to exit:");
-	     
-
-	        /*
-	         * Two steps here: first get a line, then a shift integer.
-	         */
+		
 	         repeat: while (true) {
 	        	String line = null;
 	        	int a = 0;
 	        	System.out.println("Enter a line of text or code, with no space or punctuations, or a blank line to exit:");
-	        	if(lineScanner.hasNextLine()) {
-	        	line = lineScanner.nextLine();
+	        	Scanner sc = new Scanner(System.in);
+	        	if(sc.hasNextLine()) {
+	        	line = sc.nextLine();
 	        	System.out.println("Input 1 to encrypt or 2 to decrypt");
-	        	if(lineScanner.hasNextInt()) {
-		           a = lineScanner.nextInt();
+	        	if(sc.hasNextInt()) {
+		           a = sc.nextInt();
 	        	}
 	        	}
 	            if (line.equals("") || setCode(line,a) == null) {
@@ -259,10 +251,10 @@ public class Playfair {
                 }
                 code = "";
                 encode = null;
-                arr = null;
                 q = 0;
+               
 	        }
-	           lineScanner.close();
+	          
 	         }
   }
 	        
