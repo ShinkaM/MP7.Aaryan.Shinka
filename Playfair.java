@@ -18,6 +18,11 @@ public class Playfair {
 	 * this is the key used, has all letters of alphabet except Q and G
 	 */
 	static String key = "THEUICKBROWNFXJMPSVLAZYDG";
+	
+	/**
+	 * encrypt or decrypt
+	 */
+	static int q = 0;
 
 
 	/**
@@ -92,10 +97,12 @@ public class Playfair {
 	 * @return
 	 */
 	public static String[] setCode(String x, int a) {
+		//System.out.println(x);
+		q = a;
 		String str2 = "";
 		if(a == 1) {
 		    str2 = makeCode(x);
-		} else {
+		} else if(a == 2) {
 			str2 = x.toUpperCase();
 		}
 		if(str2 != null) {
@@ -135,14 +142,22 @@ public class Playfair {
 			for(int i = 0; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[x][i]) {
 					square = false;
-					output[k] = arr[x][(y + 1) % arr.length] + "" + arr[x][(i + 1) % arr.length]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
-				}
+					if(q == 2) {
+						output[k] = arr[x][(y - 1 + 5) % arr.length] + "" + arr[x][(i - 1 + 5) % arr.length];
+					}else {
+					    output[k] = arr[x][(y + 1) % arr.length] + "" + arr[x][(i + 1) % arr.length]; // %5 wraps around, so 5 % 5 = 0, 6 % 5 = 1, 7 % 5 = 2, etc
+				    }
+				}	
 			}
 			// for the case where the second pair is in the same column
 			for(int i = 0; i < arr.length; i++) {
 				if(encode[k].charAt(1) == arr[i][y]) {
 					square = false;
-					output[k] = arr[(x + 1) % arr.length][y] + "" + arr[(i + 1) % arr.length][y];
+					if(q == 2) {
+						output[k] = arr[(x - 1 + 5) % arr.length][y] + "" + arr[(i - 1 + 5) % arr.length][y];
+					}else {
+					    output[k] = arr[(x + 1) % arr.length][y] + "" + arr[(i + 1) % arr.length][y];
+					}			
 				}
 			}
 			
@@ -170,10 +185,10 @@ public class Playfair {
 			}
 		
 	}
-		 /*for(int i = 0; i < output.length; i++) {
-         	System.out.print(output[i] + " " + "@@");
+		/* for(int i = 0; i < output.length; i++) {
+         	System.out.print(output[i] + " ");
          }*/
-		return output;
+		 return output;
 	}
 	public String decode() {
 		Playfair ob = new Playfair();
@@ -203,9 +218,9 @@ public class Playfair {
 	public static void main(final String[] unused) {
 
 	        Scanner lineScanner = new Scanner(System.in);
-	        String linePrompt1 = String.format("Input 1 to encrypt or 2 to decrypt");
+	        //String linePrompt1 = String.format("Input 1 to encrypt or 2 to decrypt");
 	        
-	        String linePrompt2 = String.format("Enter a line of text or code, with no space or punctuations, or a blank line to exit:");
+	       // String linePrompt2 = String.format("Enter a line of text or code, with no space or punctuations, or a blank line to exit:");
 	     
 
 	        /*
@@ -213,19 +228,20 @@ public class Playfair {
 	         */
 	         repeat: while (true) {
 	        	String line = null;
-	        	System.out.println(linePrompt2);
-		        line = lineScanner.nextLine();
-	        	System.out.println(linePrompt1);
-	        	int a = lineScanner.nextInt();
-	            while (lineScanner.hasNextLine()) {
-	                    if (line.equals("") || setCode(line,a) == null) {
-	                        System.out.println("Invalid input: no punctuations");
-	                        break repeat;
-	                        
-	                    } else {
-	                    	break;
-	                    }
+	        	int a = 0;
+	        	System.out.println("Enter a line of text or code, with no space or punctuations, or a blank line to exit:");
+	        	if(lineScanner.hasNextLine()) {
+	        	line = lineScanner.nextLine();
+	        	System.out.println("Input 1 to encrypt or 2 to decrypt");
+	        	if(lineScanner.hasNextInt()) {
+		           a = lineScanner.nextInt();
+	        	}
+	        	}
+	            if (line.equals("") || setCode(line,a) == null) {
+	                 System.out.println("Invalid input: no punctuations");
+	                 break repeat;
 	            }
+	            
 	            Playfair obj = new Playfair();
                 if(a == 1) {
 	               obj.setKey();
@@ -244,9 +260,11 @@ public class Playfair {
                 code = "";
                 encode = null;
                 arr = null;
+                q = 0;
 	        }
 	           lineScanner.close();
-
+	         }
   }
+	        
 	 
-}
+
