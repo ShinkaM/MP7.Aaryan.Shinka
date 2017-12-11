@@ -12,7 +12,8 @@ The key was made based on the sentence "THE QUICK BROWN FOX JUMPED OVER THE LAZY
 ### Process
 1. We first made the general structure of the code, so that it can make the key, convert the message into a string array, and encode the message
 2. We then used the Scanner so that it can take in the input from the user
-3. At this point we debugged the code, referencing the outputs it got from each of the methods
+3. At this point we debugged the code, referencing the outputs it got from each of the methods and comparing it with the expected outputs
+(reference EXPECTED OUTPUTS)
 4. We added the decrypt feature
 5. We debugged the code to ensure that it worked
 
@@ -21,4 +22,4 @@ The key was made based on the sentence "THE QUICK BROWN FOX JUMPED OVER THE LAZY
 that if the message included a 'Q', the code would return null. This was solved by replacing the letter with a 'U' if the message included a 'Q'.
 
 ### The key
- The key may be changed by directly chaning the content of the key variable.  This must be 25 letters, no spaces, and missing 'Q'.
+ The key may be changed by directly changing the content of the key variable.  This must be 25 letters, no spaces, and missing 'Q'.
