@@ -2,7 +2,7 @@
 ## Description
 This is written in Java, and takes in an input from the user, and encrypts it using the method of a Playfair Cipher.  It also comes with a 
 decrypting feature.  
-The key was made based on the sentence " THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG" with duplicated letters and spaces removed.
+The key was made based on the sentence "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG" with duplicated letters and spaces removed.
 
 ### How-to:
 1. A dialogue will prompt the user to input a message 
@@ -21,4 +21,4 @@ The key was made based on the sentence " THE QUICK BROWN FOX JUMPED OVER THE LAZ
 that if the message included a 'Q', the code would return null. This was solved by replacing the letter with a 'U' if the message included a 'Q'.
 
 ### The key
- The key may be changed by directly chaning the content of the key variable.  This must be in all caps, no spaces, 25 letters, and missingg 'Q'.
+ The key may be changed by directly chaning the content of the key variable.  This must be 25 letters, no spaces, and missing 'Q'.
