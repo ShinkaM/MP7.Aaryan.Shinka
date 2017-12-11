@@ -1,7 +1,7 @@
 # MP7.Aaryan.Shinka
 ## Description
-This is written in Java, and takes in an input from the user, and encrypts it using the method of a Playfair Cipher.  It also comes with a 
-decrypting feature.  
+
+This is written in Java, and takes in an input from the user, and encrypts it using the method of a Playfair Cipher((https://en.wikipedia.org/wiki/Playfair_cipher).  It also comes with a decrypting feature.  
 The key was made based on the sentence "THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG" with duplicated letters and spaces removed.
 
 ### How-to:
